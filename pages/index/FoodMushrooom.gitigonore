@@ -1,0 +1,9 @@
+# 忽略每个人本地开发者工具私有配置（多人必加，不然疯狂冲突）
+project.private.config.json
+# npm依赖包
+node_modules
+miniprogram_npm
+# 系统缓存、日志
+.DS_Store
+*.log
+.vscode

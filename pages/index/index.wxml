@@ -1,0 +1,37 @@
+<scroll-view class="page-scroll" scroll-y="{{true}}" type="list">
+<view class="page-container">
+  <view class="title">超级菇哩养成大计</view>
+  <view class="subtitle">想吃 vs 实际，省下的都喂给菇哩</view>
+
+  <view class="guli-card">
+    <view class="card-title">菇哩的累计投喂</view>
+    <view class="total-value">{{totalExp}} <text class="unit">大卡</text></view>
+    <view class="muted">已记录 {{feedCount}} 次 · 每一份积累都在这里</view>
+  </view>
+
+  <view class="form-card">
+    <input class="form-input" placeholder="今天想吃什么？" value="{{wantText}}" bindinput="onWantInput" disabled="{{submitting || managingHistory}}" />
+    <input class="form-input" placeholder="实际吃了什么？" value="{{actualText}}" bindinput="onActualInput" disabled="{{submitting || managingHistory}}" />
+    <button class="confirm-button" bindtap="confirmFeed" loading="{{submitting}}" disabled="{{submitting || managingHistory || !storageReady}}">{{submitting ? '正在投喂' : '确认投喂'}}</button>
+  </view>
+
+  <view class="result-box" wx:if="{{result}}">{{result}}</view>
+
+  <view class="history-card">
+    <view class="card-title">投喂历史</view>
+    <view class="muted history-note">记录保存在当前设备；新记录的正热量差增加累计，负热量差扣减累计。</view>
+    <view class="history-actions">
+      <button class="history-button" bindtap="undoLastFeed" disabled="{{submitting || managingHistory || !storageReady || !history.length}}">撤回最近一次记录</button>
+      <button class="history-button danger-button" bindtap="clearHistory" disabled="{{submitting || managingHistory || !storageReady || !history.length}}">清空全部记录</button>
+    </view>
+    <view class="empty-state" wx:if="{{!history.length}}">还没有投喂记录，完成第一次计算就会自动保存。</view>
+    <view class="history-item" wx:for="{{history}}" wx:key="id">
+      <view class="history-top"><text class="muted">{{item.timeText}}</text><text class="history-gain">{{item.gained > 0 ? '+' : ''}}{{item.gained}} 大卡</text></view>
+      <view class="food-line">想吃：{{item.wantFood}}</view>
+      <view class="food-line">实际：{{item.realFood}}</view>
+      <view class="muted">本次热量差：{{item.calDiff}} 大卡</view>
+      <view class="muted" wx:if="{{item.gained !== 0 && item.credited === 0}}">此记录未计入当前累计热量</view>
+    </view>
+  </view>
+</view>
+</scroll-view>
